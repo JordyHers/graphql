@@ -40,9 +40,9 @@ const BookType = new GraphQLObjectType({
   name: "Book",
   description: "This represents a book written by an author",
   fields: () => ({
-    id: { type: GraphQLNonNull(GraphQLInt) },
-    name: { type: GraphQLNonNull(GraphQLString) },
-    authorId: { type: GraphQLNonNull(GraphQLInt) },
+    id: { type: new GraphQLNonNull(GraphQLInt) },
+    name: { type: new GraphQLNonNull(GraphQLString) },
+    authorId: { type: new GraphQLNonNull(GraphQLInt) },
     author: {
       type: AuthorType,
       resolve: (book) => {
@@ -58,8 +58,8 @@ const AuthorType = new GraphQLObjectType({
   name: "Author",
   description: "This represents a author of a book",
   fields: () => ({
-    id: { type: GraphQLNonNull(GraphQLInt) },
-    name: { type: GraphQLNonNull(GraphQLString) },
+    id: { type: new GraphQLNonNull(GraphQLInt) },
+    name: { type: new GraphQLNonNull(GraphQLString) },
     books: {
       type: new GraphQLList(BookType),
       resolve: (author) => {
@@ -106,12 +106,6 @@ const RootQueryType = new GraphQLObjectType({
   }),
 });
 
-//Next step is to create a schema
-const schema = new GraphQLSchema({
-  query: RootQueryType,
-  mutation: RootMutationType,
-});
-
 //Here is the Root Mutation Type
 const RootMutationType = new GraphQLObjectType({
   name: "Mutation",
@@ -121,8 +115,8 @@ const RootMutationType = new GraphQLObjectType({
       type: BookType,
       description: "Add a book",
       args: {
-        name: { type: GraphQLNonNull(GraphQLString) },
-        authorId: { type: GraphQLNonNull(GraphQLInt) },
+        name: { type: new GraphQLNonNull(GraphQLString) },
+        authorId: { type: new GraphQLNonNull(GraphQLInt) },
       },
       resolve: (parent, args) => {
         const book = {
@@ -138,7 +132,7 @@ const RootMutationType = new GraphQLObjectType({
       type: AuthorType,
       description: "Add an author",
       args: {
-        name: { type: GraphQLNonNull(GraphQLString) },
+        name: { type: new GraphQLNonNull(GraphQLString) },
       },
       resolve: (parent, args) => {
         const author = { id: authors.length + 1, name: args.name };
@@ -147,6 +141,12 @@ const RootMutationType = new GraphQLObjectType({
       },
     },
   }),
+});
+
+//Next step is to create a schema
+const schema = new GraphQLSchema({
+  query: RootQueryType,
+  mutation: RootMutationType,
 });
 
 // const schema = new GraphQLSchema({
